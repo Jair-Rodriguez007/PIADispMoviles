@@ -22,12 +22,19 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Comparador de Tonos de Pared'),
+        title: Text('Intercolor'),
+        backgroundColor: Colors.green,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Aquí mostramos el logo
+            Image.asset(
+              'assets/logo.png',
+              height: 150, // Ajusta el tamaño del logo
+            ),
+            SizedBox(height: 20),
             Text(
               'Bienvenido a la app de comparación de tonos de pared.',
               style: TextStyle(fontSize: 20),
@@ -46,14 +53,14 @@ class WelcomeScreen extends StatelessWidget {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Navegar a la pantalla de configuración
+
               },
               child: Text('Configuración'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Navegar a la pantalla de tutorial
+
               },
               child: Text('Tutorial'),
             ),
@@ -69,6 +76,7 @@ class AnalysisScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: Text('Resumen del Análisis'),
       ),
       body: Center(
@@ -80,7 +88,7 @@ class AnalysisScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 10),
-            // Información del análisis (simulada)
+
             Text(
               'Área 1: Necesita pintura\nÁrea 2: Uniformidad adecuada',
               textAlign: TextAlign.center,
@@ -98,14 +106,14 @@ class AnalysisScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Guardar análisis
+
               },
               child: Text('Guardar Análisis'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Compartir análisis
+
               },
               child: Text('Compartir Análisis'),
             ),
