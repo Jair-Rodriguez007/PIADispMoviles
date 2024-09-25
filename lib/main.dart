@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AnalysisScreen()),
+                  MaterialPageRoute(builder: (context) => ScanScreen()),
                 );
               },
               child: Text('Iniciar Escaneo'),
@@ -127,6 +128,88 @@ class AnalysisScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+class ScanScreen extends StatefulWidget {
+  @override
+  _ScanScreenState createState() => _ScanScreenState();
+}
+
+class _ScanScreenState extends State<ScanScreen> {
+  CameraController? _cameraController;
+  List<CameraDescription>? cameras;
+  bool _isAnalyzing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeCamera();
+  }
+
+  Future<void> initializeCamera() async {
+    cameras = await availableCameras();  // Obtén las cámaras disponibles
+    _cameraController = CameraController(
+      cameras![0],  // Usa la primera cámara disponible (normalmente la trasera)
+      ResolutionPreset.high,
+    );
+    await _cameraController?.initialize();
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _cameraController?.dispose();  // Limpia el controlador cuando la pantalla se destruye
+    super.dispose();
+  }
+
+  void _captureAndAnalyze() {
+    setState(() {
+      _isAnalyzing = true;
+    });
+
+    // Simular el análisis del color con un retraso
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _isAnalyzing = false;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AnalysisScreen()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pantalla de Escaneo'),
+      ),
+      body: Column(
+        children: [
+          // Vista de la cámara
+          Expanded(
+            child: _cameraController != null && _cameraController!.value.isInitialized
+                ? CameraPreview(_cameraController!)  // Mostrar la vista previa de la cámara
+                : Center(child: CircularProgressIndicator()),  // Mostrar un cargador mientras se inicializa
+          ),
+          if (_isAnalyzing)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LinearProgressIndicator(),  // Barra de progreso
+            ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _isAnalyzing ? null : _captureAndAnalyze,  // Deshabilitar botón mientras se analiza
+              child: Text(_isAnalyzing ? 'Analizando...' : 'Capturar y Analizar'),
+            ),
+          ),
+        ],
       ),
     );
   }
