@@ -29,14 +29,22 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Aquí mostramos el logo
-            Image.asset(
-              'assets/logo.png',
-              height: 150, // Ajusta el tamaño del logo
+
+            Text(
+              'Bienvenido a "Intercolor"',
+              style: TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
+            Image.asset(
+              'assets/logo.png',
+              height: 150,
+            ),
+            SizedBox(height: 20),
+
+            SizedBox(height: 20),
             Text(
-              'Bienvenido a la app de comparación de tonos de pared.',
+              'Logra un acabado perfecto en tus paredes con nuestro comparador de tonos',
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
