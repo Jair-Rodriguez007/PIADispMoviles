@@ -26,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Intercolor'),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFFbfbeac),
       ),
       body: Center(
         child: Column(
@@ -87,7 +87,7 @@ class AnalysisScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+          backgroundColor: Color(0xFFbfbeac),
         title: Text('Resultado'),
       ),
       body: Center(
@@ -95,7 +95,7 @@ class AnalysisScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('• Área 1: Tono desigual en la parte superior izquierda'),
-        Text('• Área 2: Tono desigual en la parte inferior derecha'),
+        Text('• Área 2: Tono desigual en la parte central derecha'),
         SizedBox(height: 20),
 
             SizedBox(height: 10),
@@ -196,7 +196,7 @@ class _ScanScreenState extends State<ScanScreen> {
           // Vista de la cámara
           Expanded(
             child: _cameraController != null && _cameraController!.value.isInitialized
-                ? CameraPreview(_cameraController!)  
+                ? CameraPreview(_cameraController!)
                 : Center(child: CircularProgressIndicator()),
           ),
           if (_isAnalyzing)
