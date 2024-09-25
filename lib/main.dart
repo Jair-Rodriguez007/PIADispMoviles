@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
+
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,8 +40,8 @@ class WelcomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Image.asset(
-              'assets/logo.png',
-              height: 150,
+              'assets/logo.jpeg',
+              height: 250,
             ),
             SizedBox(height: 20),
 
@@ -86,16 +88,16 @@ class AnalysisScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Resumen del Análisis'),
+        title: Text('Resultado'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Áreas que necesitan más pintura:',
-              style: TextStyle(fontSize: 20),
-            ),
+            Text('• Área 1: Tono desigual en la parte superior izquierda'),
+        Text('• Área 2: Tono desigual en la parte inferior derecha'),
+        SizedBox(height: 20),
+
             SizedBox(height: 10),
 
             Text(
@@ -151,9 +153,9 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<void> initializeCamera() async {
-    cameras = await availableCameras();  // Obtén las cámaras disponibles
+    cameras = await availableCameras();
     _cameraController = CameraController(
-      cameras![0],  // Usa la primera cámara disponible (normalmente la trasera)
+      cameras![0],
       ResolutionPreset.high,
     );
     await _cameraController?.initialize();
@@ -162,7 +164,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   void dispose() {
-    _cameraController?.dispose();  // Limpia el controlador cuando la pantalla se destruye
+    _cameraController?.dispose();
     super.dispose();
   }
 
@@ -171,7 +173,7 @@ class _ScanScreenState extends State<ScanScreen> {
       _isAnalyzing = true;
     });
 
-    // Simular el análisis del color con un retraso
+
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         _isAnalyzing = false;
@@ -194,18 +196,18 @@ class _ScanScreenState extends State<ScanScreen> {
           // Vista de la cámara
           Expanded(
             child: _cameraController != null && _cameraController!.value.isInitialized
-                ? CameraPreview(_cameraController!)  // Mostrar la vista previa de la cámara
-                : Center(child: CircularProgressIndicator()),  // Mostrar un cargador mientras se inicializa
+                ? CameraPreview(_cameraController!)  
+                : Center(child: CircularProgressIndicator()),
           ),
           if (_isAnalyzing)
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(),  // Barra de progreso
+              child: LinearProgressIndicator(),
             ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              onPressed: _isAnalyzing ? null : _captureAndAnalyze,  // Deshabilitar botón mientras se analiza
+              onPressed: _isAnalyzing ? null : _captureAndAnalyze,
               child: Text(_isAnalyzing ? 'Analizando...' : 'Capturar y Analizar'),
             ),
           ),
