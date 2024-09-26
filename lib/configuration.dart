@@ -40,10 +40,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.black,
-          size: 30.0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+            size: 30.0,
+          ),
+          onPressed: () {
+            Navigator.pop(context);  // Esto regresa a la pantalla anterior (main)
+          },
         ),
         title: Text('Ajustes'),
         backgroundColor: Color(0xFF80DEEA),

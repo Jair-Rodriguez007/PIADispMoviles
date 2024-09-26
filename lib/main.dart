@@ -1,6 +1,7 @@
+// main.dart
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-
+import 'pantallaEscaneo.dart';
+import 'configuration.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +33,6 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
             Text(
               'Bienvenido a "Intercolor"',
               style: TextStyle(fontSize: 20),
@@ -43,8 +43,6 @@ class WelcomeScreen extends StatelessWidget {
               'assets/logo.jpeg',
               height: 250,
             ),
-            SizedBox(height: 20),
-
             SizedBox(height: 20),
             Text(
               'Logra un acabado perfecto en tus paredes con nuestro comparador de tonos',
@@ -64,154 +62,20 @@ class WelcomeScreen extends StatelessWidget {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage(title: 'Ajustes')),  // Navega a la pantalla de ajustes
+                );
               },
               child: Text('Configuración'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               child: Text('Tutorial'),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class AnalysisScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Color(0xFFbfbeac),
-        title: Text('Resultado'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('• Área 1: Tono desigual en la parte superior izquierda'),
-        Text('• Área 2: Tono desigual en la parte central derecha'),
-        SizedBox(height: 20),
-
-            SizedBox(height: 10),
-
-            Text(
-              'Área 1: Necesita pintura\nÁrea 2: Uniformidad adecuada',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Recomendaciones:',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '1. Aplique una capa adicional en el Área 1.\n2. Verifique la mezcla de pintura.',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-
-              },
-              child: Text('Guardar Análisis'),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-
-              },
-              child: Text('Compartir Análisis'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class ScanScreen extends StatefulWidget {
-  @override
-  _ScanScreenState createState() => _ScanScreenState();
-}
-
-class _ScanScreenState extends State<ScanScreen> {
-  CameraController? _cameraController;
-  List<CameraDescription>? cameras;
-  bool _isAnalyzing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeCamera();
-  }
-
-  Future<void> initializeCamera() async {
-    cameras = await availableCameras();
-    _cameraController = CameraController(
-      cameras![0],
-      ResolutionPreset.high,
-    );
-    await _cameraController?.initialize();
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _cameraController?.dispose();
-    super.dispose();
-  }
-
-  void _captureAndAnalyze() {
-    setState(() {
-      _isAnalyzing = true;
-    });
-
-
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isAnalyzing = false;
-      });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AnalysisScreen()),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pantalla de Escaneo'),
-      ),
-      body: Column(
-        children: [
-          // Vista de la cámara
-          Expanded(
-            child: _cameraController != null && _cameraController!.value.isInitialized
-                ? CameraPreview(_cameraController!)
-                : Center(child: CircularProgressIndicator()),
-          ),
-          if (_isAnalyzing)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _isAnalyzing ? null : _captureAndAnalyze,
-              child: Text(_isAnalyzing ? 'Analizando...' : 'Capturar y Analizar'),
-            ),
-          ),
-        ],
       ),
     );
   }
