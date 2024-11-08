@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'pantallaEscaneo.dart';
 import 'configuration.dart';
+import 'tutorial.dart';
 
 void main() {
   runApp(MyApp());
@@ -71,8 +72,14 @@ class WelcomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
-              child: Text('Tutorial'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Tutorialpage(title: 'Tutorial')),
+
+            );
+          },
+                child: Text('Tutorial'),
             ),
           ],
         ),
