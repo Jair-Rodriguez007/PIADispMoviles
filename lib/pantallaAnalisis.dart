@@ -1,34 +1,43 @@
-// pantallaAnalisis.dart
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class AnalysisScreen extends StatelessWidget {
+  final String imagePath;
+  final List<List<int>> palette;
+
+  AnalysisScreen({required this.imagePath, required this.palette});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFbfbeac),
-        title: Text('Resultado'),
+        title: Text("Análisis de Tonos"),
       ),
-      body: Center(
+      body: SingleChildScrollView( // Permitir desplazamiento
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('• Área 1: Tono desigual en la parte superior izquierda'),
-            Text('• Área 2: Tono desigual en la parte central derecha'),
-            SizedBox(height: 20),
-            Text(
-              'Área 1: Necesita pintura\nÁrea 2: Uniformidad adecuada',
-              textAlign: TextAlign.center,
+          children: [
+            Image.file(File(imagePath),
+            fit: BoxFit.contain, // Asegura que la imagen se ajuste
+            height: 300,
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             Text(
-              'Recomendaciones:',
-              style: TextStyle(fontSize: 20),
+              "Paleta Generada",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
-            Text(
-              '1. Aplique una capa adicional en el Área 1.\n2. Verifique la mezcla de pintura.',
-              textAlign: TextAlign.center,
+
+
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: palette.map((color) {
+                return Container(
+                  margin: EdgeInsets.all(8.0),
+                  width: 50,
+                  height: 50,
+                  color: Color.fromRGBO(color[0], color[1], color[2], 1),
+                );
+              }).toList(),
             ),
             SizedBox(height: 20),
             ElevatedButton(

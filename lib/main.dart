@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'pantallaEscaneo.dart';
 import 'configuration.dart';
 import 'tutorial.dart';
+import 'SavedPaletteScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -80,6 +81,15 @@ class WelcomeScreen extends StatelessWidget {
             );
           },
                 child: Text('Tutorial'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SavedPaletteScreen()),
+                );
+              },
+              child: Text("Ver Paleta Guardada"),
             ),
           ],
         ),
