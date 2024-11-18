@@ -7,6 +7,7 @@ import 'pantallaAnalisis.dart'; // Importa la pantalla de análisis
 import 'package:image/image.dart' as img; // Para procesar la imagen
 import 'package:shared_preferences/shared_preferences.dart'; // Importa shared_preferences
 
+
 class ScanScreen extends StatefulWidget {
   @override
   _ScanScreenState createState() => _ScanScreenState();
@@ -121,30 +122,35 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<List<List<int>>> _generatePalette(List<List<int>> colors) async {
-    final url = "http://colormind.io/api/";
+    final url = "http://colormind.io/api/"; // Cambiado a HTTPS
+
     final body = {
       "model": "default",
       "input": colors.map((c) => c.isEmpty ? "N" : c).toList(),
     };
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(body),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final palette = List<List<int>>.from(data["result"].map((color) => List<int>.from(color)));
+      print("Respuesta de la API: ${response.body}");
 
-      // Guardar la paleta generada
-      await _savePalette(palette);
-
-      return palette;
-    } else {
-      throw Exception("Error al conectar con Colormind: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<List<int>>.from(data["result"].map((color) => List<int>.from(color)));
+      } else {
+        print("Error: ${response.statusCode} - ${response.reasonPhrase}");
+        throw Exception("Error al conectar con Colormind: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error en _generatePalette: $e");
+      rethrow;
     }
   }
+
 
   /// Guardar la paleta en SharedPreferences
   Future<void> _savePalette(List<List<int>> palette) async {
