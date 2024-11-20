@@ -118,7 +118,10 @@ class AnalysisScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Análisis de Tonos"),
+        title: Text('Análisis de Colores'),
+        centerTitle: true,
+        elevation: 2.0,
+        backgroundColor: Colors.blueGrey[800],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -195,7 +198,7 @@ class AnalysisScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
               },
               child: Text('Volver al Menú Principal'),

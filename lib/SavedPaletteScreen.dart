@@ -73,9 +73,15 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Paletas Guardadas")),
+      appBar: AppBar(
+        title: Text('Paletas Guardadas'),
+        centerTitle: true,
+        elevation: 2.0,
+        backgroundColor: Colors.blueGrey[800],
+      ),
       body: _savedPalettes.isEmpty
           ? Center(child: Text("No hay paletas guardadas"))
           : ListView.builder(
@@ -129,8 +135,8 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
                 ),
                 // Botón de eliminar
                 TextButton(
-                  onPressed: () => _deletePalette(index),
-                  child: Text("Eliminar", style: TextStyle(color: Colors.red)),
+          onPressed: () => _deletePalette(index),
+          child: Text("Eliminar", style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),

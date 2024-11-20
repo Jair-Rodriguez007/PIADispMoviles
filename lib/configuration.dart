@@ -117,12 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black, size: 30.0),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('Ajustes'),
-        backgroundColor: const Color(0xFF80DEEA),
+        title: Text('Ajustes'),
+        centerTitle: true,
+        elevation: 2.0,
+        backgroundColor: Colors.blueGrey[800],
       ),
       body: Center(
         child: Padding(
