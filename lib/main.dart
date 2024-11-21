@@ -1,5 +1,6 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 import 'pantallaEscaneo.dart';
 import 'configuration.dart';
 import 'tutorial.dart';
@@ -11,6 +12,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +20,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
+      // Ruta inicial (pantalla de login)
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => WelcomeScreen(),
+        '/scan': (context) => ScanScreen(),
+        '/settings': (context) => MyHomePage(title: 'Ajustes'),
+        '/tutorial': (context) => Tutorialpage(title: 'Tutorial'),
+        '/savedPalette': (context) => SavedPaletteScreen(),
+      },
     );
   }
 }
@@ -54,40 +65,28 @@ class WelcomeScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ScanScreen()),
-                );
+                Navigator.pushNamed(context, '/scan');
               },
               child: Text('Iniciar Escaneo'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyHomePage(title: 'Ajustes')),  // Navega a la pantalla de ajustes
-                );
+                Navigator.pushNamed(context, '/settings');
               },
               child: Text('Configuración'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Tutorialpage(title: 'Tutorial')),
-
-            );
-          },
-                child: Text('Tutorial'),
+                Navigator.pushNamed(context, '/tutorial');
+              },
+              child: Text('Tutorial'),
             ),
+            SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SavedPaletteScreen()),
-                );
+                Navigator.pushNamed(context, '/savedPalette');
               },
               child: Text("Ver Paleta Guardada"),
             ),
@@ -97,3 +96,4 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
+

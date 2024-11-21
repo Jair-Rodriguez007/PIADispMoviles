@@ -1,17 +1,12 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
-import 'pantallaAnalisis.dart';
-import 'package:image/image.dart' as img;
-import 'package:shared_preferences/shared_preferences.dart';
-
-
-void main() {
-
-}
+import 'pantallaAnalisis.dart'; // Pantalla de análisis
+import 'package:image/image.dart' as img; // Para procesar la imagen
+import 'package:shared_preferences/shared_preferences.dart'; // Para manejar configuraciones
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -141,9 +136,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
   Future<List<List<int>>> _generatePalette(List<List<int>> colors) async {
     final prefs = await SharedPreferences.getInstance();
-
     final sensitivity = prefs.getString('sensitivity') ?? 'Grado 1: Muy leve';
-
     final wallColorString = prefs.getString('wall_color') ?? '255,255,255';
     final wallColor = wallColorString.split(',').map(int.parse).toList();
 
@@ -157,35 +150,28 @@ class _ScanScreenState extends State<ScanScreen> {
     final inputColors = colors.take(colorCount).toList();
     inputColors.insert(0, wallColor);
 
-    // Convierte el primer color en formato HEX.
-    final baseColor = wallColor.isNotEmpty
-        ? '#${wallColor[0].toRadixString(16).padLeft(2, '0')}' +
-        '${wallColor[1].toRadixString(16).padLeft(2, '0')}' +
-        '${wallColor[2].toRadixString(16).padLeft(2, '0')}'
-        : '#FFFFFF';
+    final url = "http://colormind.io/api/";
 
-    // Construye la URL de la API con el color base.
-    final uri = Uri.parse(
-        'https://www.thecolorapi.com/scheme?hex=${baseColor.substring(1)}&mode=triad&count=${colorCount}');
+    final body = {
+      "model": "default",
+      "input": inputColors.map((c) => c.isEmpty ? "N" : c).toList(),
+    };
 
     try {
-      final response = await http.get(uri);
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        final palette = (data['colors'] as List<dynamic>)
-            .map<List<int>>((color) {
-          final rgb = color['rgb'];
-          return [rgb['r'] as int, rgb['g'] as int, rgb['b'] as int];
-        }).toList();
-
-        return palette;
+        return List<List<int>>.from(data["result"].map((color) => List<int>.from(color)));
       } else {
-        throw Exception("Error en The Color API: ${response.statusCode}");
+        throw Exception("Error al conectar con Colormind: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception("Error al generar paleta: $e");
+      rethrow;
     }
   }
 
