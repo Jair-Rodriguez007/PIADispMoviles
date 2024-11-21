@@ -14,10 +14,9 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSavedPalettes();  // Cargar paletas al iniciar la pantalla
+    _loadSavedPalettes();
   }
 
-  // Cargar las paletas guardadas desde SharedPreferences
   Future<void> _loadSavedPalettes() async {
     final prefs = await SharedPreferences.getInstance();
     final palettesString = prefs.getString('saved_palettes');
@@ -37,7 +36,6 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
     }
   }
 
-  // Eliminar una paleta guardada
   Future<void> _deletePalette(int index) async {
     final prefs = await SharedPreferences.getInstance();
     final confirmed = await _showDeleteConfirmationDialog();
@@ -51,7 +49,6 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
     }
   }
 
-  // Mostrar un diálogo de confirmación para eliminar
   Future<bool> _showDeleteConfirmationDialog() async {
     return await showDialog<bool>(
       context: context,
@@ -97,7 +94,6 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Mostrar la imagen completa, con la misma altura que en la pantalla de análisis
                 if (File(imagePath).existsSync())
                   Image.file(
                     File(imagePath),
@@ -118,7 +114,7 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                // Mostrar los detalles de cada color en la paleta
+
                 Column(
                   children: palette.map<Widget>((color) {
                     return ListTile(
@@ -133,7 +129,7 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
                     );
                   }).toList(),
                 ),
-                // Botón de eliminar
+
                 TextButton(
           onPressed: () => _deletePalette(index),
           child: Text("Eliminar", style: TextStyle(color: Colors.red)),

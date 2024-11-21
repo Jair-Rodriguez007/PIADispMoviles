@@ -31,11 +31,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _loadSettings();
   }
 
-  // Cargar configuración guardada
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final savedSensitivity = prefs.getString('selected_sensitivity') ?? items[0];
-    final savedColorString = prefs.getString('wall_color') ?? '255,0,0'; // Color por defecto
+    final savedColorString = prefs.getString('wall_color') ?? '255,0,0';
     final colorParts = savedColorString.split(',').map(int.parse).toList();
 
     setState(() {
@@ -160,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           selectedValue = value;
                         });
-                        onSaveSettings(context); // Guardar automáticamente al cambiar
+                        onSaveSettings(context);
                       },
                       buttonStyleData: const ButtonStyleData(
                         padding: EdgeInsets.symmetric(horizontal: 16),

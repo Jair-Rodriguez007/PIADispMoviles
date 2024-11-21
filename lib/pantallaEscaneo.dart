@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
-import 'pantallaAnalisis.dart'; // Pantalla de análisis
-import 'package:image/image.dart' as img; // Para procesar la imagen
-import 'package:shared_preferences/shared_preferences.dart'; // Para manejar configuraciones
+import 'pantallaAnalisis.dart';
+import 'package:image/image.dart' as img;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -122,7 +123,7 @@ class _ScanScreenState extends State<ScanScreen> {
     final inputColors = colors.take(colorCount).toList();
     inputColors.insert(0, wallColor);
 
-    final url = "http://colormind.io/api/";
+
 
     final body = {
       "model": "default",
@@ -131,7 +132,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse("http://colormind.io/api/"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(body),
       );

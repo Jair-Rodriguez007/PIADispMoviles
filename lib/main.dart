@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'pantallaEscaneo.dart'; // Asegúrate de que esta pantalla esté implementada
+import 'pantallaEscaneo.dart';
 import 'configuration.dart';
 import 'tutorial.dart';
-import 'SavedPaletteScreen.dart';// Asegúrate de que esta pantalla esté implementada
+import 'SavedPaletteScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -59,8 +59,7 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.image_search,
                     color: Colors.orange,
                     onTap: () {
-                      // Navegar a pantalla de exploración
-                      // Por ejemplo, si tienes una pantalla de exploración:
+
                        Navigator.push(
                          context,
                          MaterialPageRoute(builder: (context) => ScanScreen()),
@@ -75,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SavedPaletteScreen()), // Navegar a la pantalla de escaneo
+                        MaterialPageRoute(builder: (context) => SavedPaletteScreen()),
                       );
                     },
                   ),
@@ -85,8 +84,6 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.palette,
                     color: Colors.blueGrey,
                     onTap: () {
-                      // Navegar a pantalla de análisis
-                      // Si tienes una pantalla para escanear imágenes, navega hacia ella:
                        Navigator.push(
                          context,
                          MaterialPageRoute(builder: (context) =>  MyHomePage(title: 'Ajustes')),
@@ -101,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Tutorialpage(title: 'Tutorial')), // Navegar a la pantalla de escaneo
+                        MaterialPageRoute(builder: (context) => Tutorialpage(title: 'Tutorial')),
                       );
                     },
                   ),
