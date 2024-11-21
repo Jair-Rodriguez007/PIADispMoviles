@@ -1,4 +1,3 @@
-// tutorialScreen.dart
 import 'package:flutter/material.dart';
 import 'pantallaEscaneo.dart';
 
