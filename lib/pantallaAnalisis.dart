@@ -1,38 +1,42 @@
 import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math'; // Importar dart:math para sqrt()
 import 'pantallaEscaneo.dart';
 import 'main.dart';
 
 class AnalysisScreen extends StatelessWidget {
-  final String imagePath;
+  final Uint8List processedImageBytes; // Imagen procesada en formato Uint8List
   final List<List<int>> palette;
 
-  AnalysisScreen({required this.imagePath, required this.palette});
+  AnalysisScreen({
+    required this.processedImageBytes,
+    required this.palette,
+  });
 
-  // Calcular la distancia entre colores (distancia Euclidiana)
+  // Calcular distancia Euclidiana entre colores
   double colorDistance(List<int> color1, List<int> color2) {
     return sqrt((color1[0] - color2[0]) * (color1[0] - color2[0]) +
         (color1[1] - color2[1]) * (color1[1] - color2[1]) +
         (color1[2] - color2[2]) * (color1[2] - color2[2]));
   }
 
-  // Comparar el color predominante con el color de la pared
+  // Comparar colores
   String compareColors(List<int> color, List<int> wallColor) {
     double distance = colorDistance(color, wallColor);
-    if (distance > 50) { // Ajusta el umbral según tus necesidades
+    if (distance > 50) {
       return "Color significativamente diferente al de la pared.";
     } else {
       return "El color es similar al de la pared.";
     }
   }
 
-  // Método para obtener el color de la pared desde SharedPreferences
+  // Obtener el color de la pared desde SharedPreferences
   Future<List<int>> _getWallColor() async {
     final prefs = await SharedPreferences.getInstance();
-    final wallColorString = prefs.getString('wall_color') ?? '255,255,255';  // Valor por defecto
+    final wallColorString = prefs.getString('wall_color') ?? '255,255,255';
     return wallColorString.split(',').map(int.parse).toList();
   }
 
@@ -49,7 +53,6 @@ class AnalysisScreen extends StatelessWidget {
         ? jsonDecode(existingPalettesString)
         : [];
 
-    // Crear una lista de detalles de los colores (RGB, HEX)
     List<Map<String, dynamic>> colorDetails = palette.map((color) {
       return {
         'rgb': color,
@@ -58,8 +61,7 @@ class AnalysisScreen extends StatelessWidget {
     }).toList();
 
     final newPalette = {
-      'imagePath': imagePath,
-      'palette': colorDetails,  // Guardamos la paleta con los detalles de los colores
+      'palette': colorDetails,
       'date': DateTime.now().toIso8601String(),
     };
 
@@ -71,7 +73,6 @@ class AnalysisScreen extends StatelessWidget {
     );
   }
 
-  // Mostrar los detalles de cada color de la paleta al hacer clic
   Widget _buildPaletteColorDetails(List<int> color, BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -123,8 +124,9 @@ class AnalysisScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.file(
-              File(imagePath),
+            // Mostrar la imagen procesada
+            Image.memory(
+              processedImageBytes,
               fit: BoxFit.contain,
               height: 300,
             ),
@@ -153,11 +155,8 @@ class AnalysisScreen extends StatelessWidget {
                 }
 
                 final wallColor = snapshot.data ?? [255, 255, 255];
-
-                // Determinar el color predominante (elegimos el de mayor frecuencia o "peso")
                 final dominantColor = palette.reduce((a, b) {
-                  // Compara por la cantidad de veces que cada color aparece (se puede ajustar la lógica)
-                  return a[0] > b[0] ? a : b; // Este ejemplo simplemente selecciona el más "rojo"
+                  return a[0] > b[0] ? a : b;
                 });
 
                 return Column(
@@ -167,10 +166,10 @@ class AnalysisScreen extends StatelessWidget {
                       height: 100,
                       color: Color.fromRGBO(dominantColor[0], dominantColor[1], dominantColor[2], 1),
                     ),
-                    Text("RGB: (${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})", style: TextStyle(fontSize: 16)),
-                    Text("HEX: ${rgbToHex(dominantColor)}", style: TextStyle(fontSize: 16)),
+                    Text("RGB: (${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})"),
+                    Text("HEX: ${rgbToHex(dominantColor)}"),
                     SizedBox(height: 20),
-                    Text(compareColors(dominantColor, wallColor), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text(compareColors(dominantColor, wallColor)),
                   ],
                 );
               },

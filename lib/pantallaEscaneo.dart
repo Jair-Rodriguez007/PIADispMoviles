@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -50,19 +51,25 @@ class _ScanScreenState extends State<ScanScreen> {
       final image = await _cameraController!.takePicture();
       final imagePath = image.path;
 
-      final colors = await _extractColorsFromImage(imagePath);
+      // Enviar la imagen al servidor Python para procesarla
+      final processedImageBytes = await _sendImageToPythonServer(imagePath);
 
+      // Extraer colores de la imagen procesada
+      final colors = await _extractColorsFromBytes(processedImageBytes);
+
+      // Generar paleta de colores a partir de los colores extraídos
       final palette = await _generatePalette(colors);
 
       setState(() {
         _isAnalyzing = false;
       });
 
+      // Navegar a la pantalla de análisis
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => AnalysisScreen(
-            imagePath: imagePath,
+            processedImageBytes: processedImageBytes,
             palette: palette,
           ),
         ),
@@ -77,9 +84,30 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
-  Future<List<List<int>>> _extractColorsFromImage(String imagePath) async {
-    final bytes = File(imagePath).readAsBytesSync();
-    final decodedImage = img.decodeImage(bytes);
+  Future<Uint8List> _sendImageToPythonServer(String imagePath) async {
+    try {
+      final url = Uri.parse("http://192.168.0.3:5000/process_image");
+
+      // Crear una solicitud de multipart
+      var request = http.MultipartRequest('POST', url);
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+
+      // Enviar la solicitud y obtener la respuesta
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final responseBody = await response.stream.bytesToString();
+        return base64Decode(jsonDecode(responseBody)['processed_image']);
+      } else {
+        throw Exception("Error del servidor: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error al enviar la imagen al servidor: $e");
+    }
+  }
+
+  Future<List<List<int>>> _extractColorsFromBytes(Uint8List imageBytes) async {
+    final decodedImage = img.decodeImage(imageBytes);
 
     if (decodedImage == null) throw Exception("No se pudo procesar la imagen");
 
