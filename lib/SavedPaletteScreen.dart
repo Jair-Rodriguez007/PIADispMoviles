@@ -27,7 +27,9 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
           jsonDecode(palettesString).map((palette) {
             return {
               'imagePath': palette['imagePath'],
-              'palette': List<Map<String, dynamic>>.from(palette['palette'].map((color) => Map<String, dynamic>.from(color))),
+              'palette': List<Map<String, dynamic>>.from(
+                palette['palette'].map((color) => Map<String, dynamic>.from(color)),
+              ),
               'date': palette['date'],
             };
           }),
@@ -66,10 +68,10 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
           ),
         ],
       ),
-    ) ?? false;
+    ) ??
+        false;
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +82,12 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
         backgroundColor: Colors.blueGrey[800],
       ),
       body: _savedPalettes.isEmpty
-          ? Center(child: Text("No hay paletas guardadas"))
+          ? Center(
+        child: Text(
+          "No hay paletas guardadas",
+          style: TextStyle(fontSize: 18),
+        ),
+      )
           : ListView.builder(
         itemCount: _savedPalettes.length,
         itemBuilder: (context, index) {
@@ -94,17 +101,17 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (File(imagePath).existsSync())
+                if (imagePath != null && File(imagePath).existsSync())
                   Image.file(
                     File(imagePath),
                     fit: BoxFit.cover,
-                    width: 200,
-                    height: 300,
+                    width: double.infinity,
+                    height: 200,
                   )
                 else
                   Container(
                     height: 100,
-                    color: Colors.grey,
+                    color: Colors.grey[300],
                     child: Center(child: Text("Imagen no disponible")),
                   ),
                 Padding(
@@ -114,25 +121,44 @@ class _SavedPaletteScreenState extends State<SavedPaletteScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-
-                Column(
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
                   children: palette.map<Widget>((color) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.all(8.0),
-                      leading: Container(
-                        width: 40,
-                        height: 40,
-                        color: Color.fromRGBO(color['rgb'][0], color['rgb'][1], color['rgb'][2], 1),
-                      ),
-                      title: Text("RGB: (${color['rgb'][0]}, ${color['rgb'][1]}, ${color['rgb'][2]})"),
-                      subtitle: Text("HEX: ${color['hex']}"),
+                    return Column(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          color: Color.fromRGBO(
+                            color['rgb'][0],
+                            color['rgb'][1],
+                            color['rgb'][2],
+                            1,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "RGB: (${color['rgb'][0]}, ${color['rgb'][1]}, ${color['rgb'][2]})",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          "HEX: ${color['hex']}",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
                     );
                   }).toList(),
                 ),
-
-                TextButton(
-          onPressed: () => _deletePalette(index),
-          child: Text("Eliminar", style: TextStyle(color: Colors.red)),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => _deletePalette(index),
+                    child: Text(
+                      "Eliminar",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
                 ),
               ],
             ),
