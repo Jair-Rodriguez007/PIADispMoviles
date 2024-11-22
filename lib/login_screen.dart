@@ -14,7 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _loginUser() async {
     try {
       // Endpoint de autenticación
-      final authUrl = Uri.parse('https://piadispmoviles-1.onrender.com/auth/login');
+      final authUrl = Uri.parse('http://192.168.0.3:3000/auth/login');
 
       // Datos de autenticación
       final response = await http.post(
