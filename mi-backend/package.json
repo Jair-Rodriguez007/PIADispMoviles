@@ -1,14 +1,15 @@
 {
   "name": "mi-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tu Nombre",
   "license": "ISC",
-  "description": "",
+  "description": "Backend para el proyecto PIADispMoviles",
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
