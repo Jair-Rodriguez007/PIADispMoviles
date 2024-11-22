@@ -14,7 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _registerUser() async {
     try {
-      final registerUrl = Uri.parse('http://192.168.0.3:3000/auth/register');
+      final registerUrl = Uri.parse('https://piadispmoviles-1.onrender.com/auth/register');
 
       final response = await http.post(
         registerUrl,

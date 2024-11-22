@@ -6,15 +6,11 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-// Configuración de conexión a PostgreSQL
+// Configuración de conexión a PostgreSQL con la URL proporcionada por Render
 const db = new Pool({
-  host: 'dpg-ct02q60gph6c73fu9p40-a', // Nombre de host de Render
-  user: 'pia_disp_moviles_user',      // Usuario de la base de datos
-  password: 'tu_contraseña_aquí',     // Contraseña proporcionada por Render
-  database: 'pia_disp_moviles',       // Nombre de la base de datos
-  port: 5432,                         // Puerto de conexión
+  connectionString: 'postgresql://pia_disp_moviles_user:S4NZQkBBOUUR6zbV38Wu3leGI2f1NuHg@dpg-ct02q60gph6c73fu9p40-a/pia_disp_moviles', // URL de conexión completa
   ssl: {
-    rejectUnauthorized: false,        // Necesario para conectarse a bases de datos externas
+    rejectUnauthorized: false, // Necesario para conectarse a bases de datos externas en Render
   },
 });
 

@@ -85,7 +85,8 @@ class AnalysisScreen extends StatelessWidget {
     final newPalette = {
       'palette': colorDetails,
       'date': DateTime.now().toIso8601String(),
-      'imagePath': imagePath, // Guarda la ruta de la imagen
+      //'imagePath': imagePath,
+      // Guarda la ruta de la imagen
     };
 
     savedPalettes.add(newPalette);
